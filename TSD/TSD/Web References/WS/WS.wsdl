@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="HelloWorld">
+        <s:complexType />
+      </s:element>
+      <s:element name="HelloWorldResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="HelloWorldResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Get_Shop_On_Guid">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="guid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="data" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="num_base" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Get_Shop_On_GuidResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Get_Shop_On_GuidResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Get_Document_1c">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="guid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="data" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="num_base" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Get_Document_1cResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Get_Document_1cResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTMCForTSD">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="guid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="data" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="num_base" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTMCForTSDResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTMCForTSDResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UploadDocumentTSD">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="guid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="data" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="num_base" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UploadDocumentTSDResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UploadDocumentTSDResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetExistDocumentTSD">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="guid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="data" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="num_base" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetExistDocumentTSDResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetExistDocumentTSDResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ExistsUpdateProrgam">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="guid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="data" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="num_base" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ExistsUpdateProrgamResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ExistsUpdateProrgamResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUpdateProgram">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="guid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="data" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="num_base" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUpdateProgramResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetUpdateProgramResult" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="HelloWorldSoapIn">
+    <wsdl:part name="parameters" element="tns:HelloWorld" />
+  </wsdl:message>
+  <wsdl:message name="HelloWorldSoapOut">
+    <wsdl:part name="parameters" element="tns:HelloWorldResponse" />
+  </wsdl:message>
+  <wsdl:message name="Get_Shop_On_GuidSoapIn">
+    <wsdl:part name="parameters" element="tns:Get_Shop_On_Guid" />
+  </wsdl:message>
+  <wsdl:message name="Get_Shop_On_GuidSoapOut">
+    <wsdl:part name="parameters" element="tns:Get_Shop_On_GuidResponse" />
+  </wsdl:message>
+  <wsdl:message name="Get_Document_1cSoapIn">
+    <wsdl:part name="parameters" element="tns:Get_Document_1c" />
+  </wsdl:message>
+  <wsdl:message name="Get_Document_1cSoapOut">
+    <wsdl:part name="parameters" element="tns:Get_Document_1cResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTMCForTSDSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTMCForTSD" />
+  </wsdl:message>
+  <wsdl:message name="GetTMCForTSDSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTMCForTSDResponse" />
+  </wsdl:message>
+  <wsdl:message name="UploadDocumentTSDSoapIn">
+    <wsdl:part name="parameters" element="tns:UploadDocumentTSD" />
+  </wsdl:message>
+  <wsdl:message name="UploadDocumentTSDSoapOut">
+    <wsdl:part name="parameters" element="tns:UploadDocumentTSDResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetExistDocumentTSDSoapIn">
+    <wsdl:part name="parameters" element="tns:GetExistDocumentTSD" />
+  </wsdl:message>
+  <wsdl:message name="GetExistDocumentTSDSoapOut">
+    <wsdl:part name="parameters" element="tns:GetExistDocumentTSDResponse" />
+  </wsdl:message>
+  <wsdl:message name="ExistsUpdateProrgamSoapIn">
+    <wsdl:part name="parameters" element="tns:ExistsUpdateProrgam" />
+  </wsdl:message>
+  <wsdl:message name="ExistsUpdateProrgamSoapOut">
+    <wsdl:part name="parameters" element="tns:ExistsUpdateProrgamResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetUpdateProgramSoapIn">
+    <wsdl:part name="parameters" element="tns:GetUpdateProgram" />
+  </wsdl:message>
+  <wsdl:message name="GetUpdateProgramSoapOut">
+    <wsdl:part name="parameters" element="tns:GetUpdateProgramResponse" />
+  </wsdl:message>
+  <wsdl:portType name="WSSoap">
+    <wsdl:operation name="HelloWorld">
+      <wsdl:input message="tns:HelloWorldSoapIn" />
+      <wsdl:output message="tns:HelloWorldSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Get_Shop_On_Guid">
+      <wsdl:input message="tns:Get_Shop_On_GuidSoapIn" />
+      <wsdl:output message="tns:Get_Shop_On_GuidSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Get_Document_1c">
+      <wsdl:input message="tns:Get_Document_1cSoapIn" />
+      <wsdl:output message="tns:Get_Document_1cSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTMCForTSD">
+      <wsdl:input message="tns:GetTMCForTSDSoapIn" />
+      <wsdl:output message="tns:GetTMCForTSDSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UploadDocumentTSD">
+      <wsdl:input message="tns:UploadDocumentTSDSoapIn" />
+      <wsdl:output message="tns:UploadDocumentTSDSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetExistDocumentTSD">
+      <wsdl:input message="tns:GetExistDocumentTSDSoapIn" />
+      <wsdl:output message="tns:GetExistDocumentTSDSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ExistsUpdateProrgam">
+      <wsdl:input message="tns:ExistsUpdateProrgamSoapIn" />
+      <wsdl:output message="tns:ExistsUpdateProrgamSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUpdateProgram">
+      <wsdl:input message="tns:GetUpdateProgramSoapIn" />
+      <wsdl:output message="tns:GetUpdateProgramSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WSSoap" type="tns:WSSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="HelloWorld">
+      <soap:operation soapAction="http://tempuri.org/HelloWorld" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Get_Shop_On_Guid">
+      <soap:operation soapAction="http://tempuri.org/Get_Shop_On_Guid" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Get_Document_1c">
+      <soap:operation soapAction="http://tempuri.org/Get_Document_1c" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTMCForTSD">
+      <soap:operation soapAction="http://tempuri.org/GetTMCForTSD" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UploadDocumentTSD">
+      <soap:operation soapAction="http://tempuri.org/UploadDocumentTSD" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetExistDocumentTSD">
+      <soap:operation soapAction="http://tempuri.org/GetExistDocumentTSD" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ExistsUpdateProrgam">
+      <soap:operation soapAction="http://tempuri.org/ExistsUpdateProrgam" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUpdateProgram">
+      <soap:operation soapAction="http://tempuri.org/GetUpdateProgram" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WSSoap12" type="tns:WSSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="HelloWorld">
+      <soap12:operation soapAction="http://tempuri.org/HelloWorld" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Get_Shop_On_Guid">
+      <soap12:operation soapAction="http://tempuri.org/Get_Shop_On_Guid" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Get_Document_1c">
+      <soap12:operation soapAction="http://tempuri.org/Get_Document_1c" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTMCForTSD">
+      <soap12:operation soapAction="http://tempuri.org/GetTMCForTSD" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UploadDocumentTSD">
+      <soap12:operation soapAction="http://tempuri.org/UploadDocumentTSD" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetExistDocumentTSD">
+      <soap12:operation soapAction="http://tempuri.org/GetExistDocumentTSD" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ExistsUpdateProrgam">
+      <soap12:operation soapAction="http://tempuri.org/ExistsUpdateProrgam" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUpdateProgram">
+      <soap12:operation soapAction="http://tempuri.org/GetUpdateProgram" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WS">
+    <wsdl:port name="WSSoap" binding="tns:WSSoap">
+      <soap:address location="http://ch.sd2.com.ua/WS/WS.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WSSoap12" binding="tns:WSSoap12">
+      <soap12:address location="http://ch.sd2.com.ua/WS/WS.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,214 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0E34176C-C89F-4823-8D62-B9C5F2154E13}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TSD</RootNamespace>
+    <AssemblyName>TSD</AssemblyName>
+    <ProjectTypeGuids>{4D628B5B-2FBC-4AA6-8C16-197242AEB884};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <PlatformFamilyName>WindowsCE</PlatformFamilyName>
+    <PlatformID>08421fe6-3043-4bb0-895d-36a58d92ed42</PlatformID>
+    <OSVersion>7.0</OSVersion>
+    <DeployDirSuffix>TSD</DeployDirSuffix>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <NativePlatformName>Symbol MC3200c70 Windows CE 7.0 PSDK</NativePlatformName>
+    <FormFactorID>
+    </FormFactorID>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;$(PlatformFamilyName)</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <FileAlignment>512</FileAlignment>
+    <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;$(PlatformFamilyName)</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <FileAlignment>512</FileAlignment>
+    <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite, Version=1.0.103.0, Culture=neutral, PublicKeyToken=1fdb50b1b62b4c84, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ChageData.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChageData.Designer.cs">
+      <DependentUpon>ChageData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CheckAndPrintPrices.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CheckAndPrintPrices.Designer.cs">
+      <DependentUpon>CheckAndPrintPrices.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CryptorEngine.cs" />
+    <Compile Include="DocumentInventory1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DocumentInventory1.Designer.cs">
+      <DependentUpon>DocumentInventory1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DocumentList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DocumentList.Designer.cs">
+      <DependentUpon>DocumentList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InputCommentNewDocument.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InputCommentNewDocument.Designer.cs">
+      <DependentUpon>InputCommentNewDocument.cs</DependentUpon>
+    </Compile>
+    <Compile Include="JoutnalInventory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="JoutnalInventory.Designer.cs">
+      <DependentUpon>JoutnalInventory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PlaySound.cs" />
+    <Compile Include="PowerStatus.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ChageData.resx">
+      <DependentUpon>ChageData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CheckAndPrintPrices.resx">
+      <DependentUpon>CheckAndPrintPrices.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DocumentInventory1.resx">
+      <DependentUpon>DocumentInventory1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DocumentList.resx">
+      <DependentUpon>DocumentList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JoutnalInventory.resx">
+      <DependentUpon>JoutnalInventory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectProducts.resx">
+      <DependentUpon>SelectProducts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Setting.resx">
+      <DependentUpon>Setting.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SelectCharacteristic.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectCharacteristic.Designer.cs">
+      <DependentUpon>SelectCharacteristic.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SelectProducts.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectProducts.Designer.cs">
+      <DependentUpon>SelectProducts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Setting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Setting.Designer.cs">
+      <DependentUpon>Setting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\WS\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="WorkWithBarcode.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WorkWithBarcode.Designer.cs">
+      <DependentUpon>WorkWithBarcode.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="http://ch.sd2.com.ua/WS/WS.asmx">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\WS\</RelPath>
+      <UpdateFromURL>http://ch.sd2.com.ua/WS/WS.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>
+      </CachedAppSettingsObjectName>
+      <CachedSettingsPropName>
+      </CachedSettingsPropName>
+    </WebReferenceUrl>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web References\WS\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\WS\WS.wsdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web References\WS\WS.disco" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}">
+        <HostingProcess disable="1" />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

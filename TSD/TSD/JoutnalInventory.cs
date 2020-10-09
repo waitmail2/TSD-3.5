@@ -1,0 +1,338 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using System.Data.SQLite;
+
+namespace TSD
+{
+    public partial class JoutnalInventory : Form
+    {
+        public int typ_doc = 0;
+
+
+        public JoutnalInventory()
+        {
+            InitializeComponent();
+            this.Load += new EventHandler(JoutnalInventory_Load);
+            this.KeyPreview = true;
+            this.listView_inventory.SelectedIndexChanged += new EventHandler(listView_inventory_SelectedIndexChanged);
+        }
+
+        private void listView_inventory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listView_inventory.Items.Count > 0)
+            {
+                if (listView_inventory.SelectedIndices.Count > 0)
+                {
+                    label_comment.Text = listView_inventory.Items[listView_inventory.SelectedIndices[0]].SubItems[2].Text;
+                }
+            }
+        }
+        
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                this.Close();
+            }
+            else if (e.KeyCode == Keys.Enter)
+            {
+                if (listView_inventory.Items.Count > 0)
+                {
+                    btn_select_Click(null, null);
+                }
+            }
+            //else if (e.KeyCode == Keys.D0)
+            //{
+            //    //btn_new_document_Click(null, null);
+            //}
+            //else if (e.KeyCode == Keys.D1)
+            //{
+            //    load_documents();
+            //}
+            else if (e.KeyCode == Keys.F14)
+            {
+                txtB_selection_text.Focus();
+                txtB_selection_text.SelectAll();
+            }
+            else if (e.KeyCode == Keys.F15)
+            {
+                load_documents();
+                if (listView_inventory.Items.Count>0)
+                {
+                    listView_inventory.Focus();
+                    listView_inventory.Items[0].Selected = true;
+                    listView_inventory.Items[0].Focused = true;
+                }
+
+            }
+        }
+
+        private void JoutnalInventory_Load(object sender, EventArgs e)
+        {
+            // Set the view to show details.
+            listView_inventory.View = View.Details;
+
+            //listView_inventory.AllowColumnReorder = false;
+
+            // Select the item and subitems when selection is made.
+            listView_inventory.FullRowSelect = true;
+
+            // Display grid lines.
+            //listView_inventory.GridLines = true;
+
+            // Sort the items in the list in ascending order.
+            //listView1.Sorting = SortOrder.Ascending;            
+            listView_inventory.Columns.Add("Статус", 20, HorizontalAlignment.Left);
+            //if (typ_doc != 4)
+            //{
+            listView_inventory.Columns.Add("Дата", 100, HorizontalAlignment.Left);
+            //}
+            listView_inventory.Columns.Add("Комментарий", 200, HorizontalAlignment.Left);
+            load_documents();
+            if (typ_doc == 1)
+            {
+                this.Text = " Инвентаризации ";
+            }
+            else if (typ_doc == 2)
+            {
+                this.Text = " Приходные накладные ";
+                btn_new_document.Visible = true;
+            }
+            else if (typ_doc == 3)
+            {
+                this.Text = " Заказы клиентов ";
+                btn_new_document.Visible = true;
+            }
+            else if (typ_doc == 4)
+            {
+                this.Text = " Проверка и печать ценников ";
+                btn_new_document.Visible = true;
+                this.Controls.Remove(this.txtB_selection_text);
+                this.Controls.Remove(this.btn_selection);
+                this.Controls.Remove(this.label_comment);
+                this.listView_inventory.Location = new System.Drawing.Point(3, 3);
+                //this.listView_inventory.Name = "listView_inventory";
+                this.listView_inventory.Size = new System.Drawing.Size(312, 265);
+                //listView_inventory.
+            }
+
+        }
+
+        private void get_zagolovok()
+        {
+            if (typ_doc == 1)
+            {
+                if (txtB_selection_text.Text.Trim().Length > 0)
+                {
+                    this.Text = "ОТБОР Инвентаризации ";
+                }
+                else
+                {
+                    this.Text = " Инвентаризации ";
+                }
+            }
+            else if (typ_doc == 2)
+            {
+                if (txtB_selection_text.Text.Trim().Length > 0)
+                {
+                    this.Text = " ОТБОР Приходные накладные ";
+                }
+                else
+                {
+                    this.Text = " Приходные накладные ";
+                }
+            }
+            else if (typ_doc == 3)
+            {
+                if (txtB_selection_text.Text.Trim().Length > 0)
+                {
+                    this.Text = " ОТБОР Заказы клиентов ";
+                }
+                else
+                {
+                    this.Text = " Заказы клиентов ";
+                }
+            }
+            else if (typ_doc == 4)
+            {
+                this.Text = " Проверка и печать ценников "; 
+            }
+        }
+        
+        private void load_documents()
+        {
+            SQLiteConnection conn = Program.ConnectForDataBase();
+            listView_inventory.Items.Clear();
+
+            try
+            {
+                conn.Open();
+                string query = "";//
+                if (txtB_selection_text.Text.Trim().Length > 0)
+                {
+                    query = "SELECT  status ,date,guid,info_1s FROM dh where status<3 AND type=" + typ_doc.ToString() + " AND info_1s LIKE '%"+txtB_selection_text.Text.Trim()+"%' order by date ";//
+                }
+                else
+                {
+                    query = "SELECT  status ,date,guid,info_1s FROM dh where status<3 AND type=" + typ_doc.ToString() + " order by date ";//
+                }
+                
+                SQLiteCommand command = new SQLiteCommand(query, conn);
+                SQLiteDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    string _status=reader["status"].ToString();
+                    if (_status == "0")
+                    {
+                        _status = "Н";
+                    }
+                    else if (_status == "1")
+                    {
+                        _status = "Р";
+                    }
+                    else if (_status == "2")
+                    {
+                        _status = "З";
+                    }
+                    else if (_status == "3")
+                    {
+                        _status = "ПЦ";
+                    }
+                    ListViewItem item = new ListViewItem(_status);                    
+                    item.SubItems.Add(reader.GetDateTime(1).ToString("dd.MM.yyyy"));
+                    item.Tag = reader["guid"].ToString();
+                    item.SubItems.Add(reader["info_1s"].ToString());
+                    listView_inventory.Items.Add(item);
+                }
+                if (listView_inventory.Items.Count > 0)
+                {
+                    listView_inventory.Items[0].Selected = true;
+                    listView_inventory.Items[0].Focused = true;                    
+                }
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                if (conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                }
+            } 
+        }
+
+
+        private void btn_Esc_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void btn_open_document_Click(object sender, EventArgs e)
+        {
+            if (listView_inventory.Items.Count == 0)
+            {
+                return;
+            }
+            int index = listView_inventory.SelectedIndices[0];
+            string guid = listView_inventory.Items[listView_inventory.SelectedIndices[0]].Tag.ToString();
+            if (guid != "")
+            {
+                DocumentList doc = new DocumentList();
+                doc.guid = guid;
+                doc.type = typ_doc.ToString();// listView_inventory.FocusedItem.SubItems[1].Text;
+                doc.its_new = false;
+                doc.ShowDialog();
+                listView_inventory.Items.Clear();
+                load_documents();
+                //Позиционирование на ранее выделеном/активном документе
+                listView_inventory.Items[index].Selected = true;
+                listView_inventory.Items[index].Focused = true;
+                listView_inventory.EnsureVisible(index);
+            }
+        }
+
+        private void btn_select_Click(object sender, EventArgs e)
+        {
+            if (listView_inventory.Items.Count == 0)
+            {
+                return;
+            }
+            int index = listView_inventory.SelectedIndices[0];
+            string guid = listView_inventory.Items[listView_inventory.SelectedIndices[0]].Tag.ToString();
+            if (guid != "")
+            {
+                DocumentInventory1 d1 = new DocumentInventory1();
+                d1.guid = guid;
+                d1.typ_doc = typ_doc.ToString();// listView_inventory.FocusedItem.SubItems[1].Text;
+                //d1.its_new = false;
+                d1.ShowDialog();
+                listView_inventory.Items.Clear();
+                load_documents();
+                if ((listView_inventory.Items.Count >= index)&&(listView_inventory.Items.Count>0))
+                {
+                    listView_inventory.Items[index].Selected = true;
+                    listView_inventory.Items[index].Focused = true;
+                    listView_inventory.EnsureVisible(index);
+                }
+            }
+
+        }
+
+        private void btn_new_document_Click(object sender, EventArgs e)
+        {
+            InputCommentNewDocument inptd = new InputCommentNewDocument();
+            if(inptd.ShowDialog()== DialogResult.Cancel)
+            {
+                return;
+            }
+            DocumentInventory1 doc = new DocumentInventory1();            
+            string new_guid = Guid.NewGuid().ToString();
+            doc.typ_doc = this.typ_doc.ToString();
+            doc.guid = new_guid;
+            doc.its_new = 1;
+            if (!doc.write_new_document(inptd.txtb_description.Text))
+            {
+                MessageBox.Show(" Не удалось записать новый документ ");
+                return;
+            }            
+            doc.ShowDialog();
+            doc.Dispose();
+            listView_inventory.Items.Clear();
+            load_documents();
+            //позиционирование на новой позиции
+            int index = 0; bool finded = false;
+            for (int i = 0; i < listView_inventory.Items.Count; i++)
+            {
+                if (listView_inventory.Items[i].Tag.ToString() == new_guid)
+                {
+                    index = i;
+                    finded = true;
+                    break;
+                }
+            }
+            if (finded)
+            {
+                listView_inventory.Items[index].Selected = true;
+                listView_inventory.Items[index].Focused = true;
+                listView_inventory.EnsureVisible(index);
+            }
+            btn_select_Click(null, null);
+        }
+
+        private void btn_selection_Click(object sender, EventArgs e)
+        {
+            load_documents();
+        }       
+    }
+}
