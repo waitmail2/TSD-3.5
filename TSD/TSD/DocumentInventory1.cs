@@ -351,7 +351,8 @@ namespace TSD
             }          
              
             this.Close();
-            Program.BackupDatabases();
+
+            //Program.BackupDatabases();
         }
 
         private void btn_delete_Click(object sender, EventArgs e)

@@ -212,6 +212,10 @@ namespace TSD
             {
                 btn_change_data_Click(null, null); 
             }
+            else if (e.KeyCode == Keys.D6)
+            {
+                button2_Click(null, null);
+            }
             else if (e.KeyCode == Keys.D5)
             {
                 btn_inventory_Click(null, null);
@@ -302,6 +306,16 @@ namespace TSD
             ji.ShowDialog();
             ji.Dispose();
             this.timer_backup_data.Enabled = true;       
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.timer_backup_data.Enabled = false;
+            JoutnalInventory ji = new JoutnalInventory();
+            ji.typ_doc = 5;
+            ji.ShowDialog();
+            ji.Dispose();
+            this.timer_backup_data.Enabled = true;      
         }
     }
 }

@@ -97,12 +97,12 @@
             // 
             // button2
             // 
-            this.button2.Enabled = false;
             this.button2.Location = new System.Drawing.Point(3, 208);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(310, 30);
             this.button2.TabIndex = 8;
-            this.button2.Text = "(6) Сбор штрихкодов";
+            this.button2.Text = "(6) Собрать по документу";
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // label_powerstatus
             // 

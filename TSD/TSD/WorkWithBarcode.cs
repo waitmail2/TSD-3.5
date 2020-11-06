@@ -387,7 +387,9 @@ namespace TSD
         }
 
 
-        
+        /// <summary>
+        /// Записать новые изменения
+        /// </summary>
         private void write_record()
         {
 
@@ -1029,20 +1031,27 @@ namespace TSD
                             label_количество_в_1с.Text =  get_quantity_1c(); 
 
                         }
-                        else
+                        else//В документе нет этой строчки
                         {
                             if (its_new == 0)
                             {
-                                txtB_tovar.Text = tovar_code + ", " + reader["tovar_name"].ToString() + ";" +
-                                    reader["characteristic_name"].ToString() +
-                                    " \r\n ОТСУТСТВУЕТ В ЭТОМ ДОКУМЕНТЕ ";
-                                PlaySound ps = new PlaySound();
-                                ps.PlaySound_WAV("\\Windows\\exclam.wav");
-                                if (typ_doc == "2")
+                                if (typ_doc != "5")
                                 {
-                                    tovar_code = "";
-                                    txtB_quantity.Text = "0";
-                                    txtB_input_barcode.Focus();                               
+                                    txtB_tovar.Text = tovar_code + ", " + reader["tovar_name"].ToString() + ";" +
+                                        reader["characteristic_name"].ToString() +
+                                        " \r\n ОТСУТСТВУЕТ В ЭТОМ ДОКУМЕНТЕ ";
+                                    PlaySound ps = new PlaySound();
+                                    ps.PlaySound_WAV("\\Windows\\exclam.wav");
+                                    if (typ_doc == "2")
+                                    {
+                                        tovar_code = "";
+                                        txtB_quantity.Text = "0";
+                                        txtB_input_barcode.Focus();
+                                    }
+                                }
+                                else//внести запись в документ
+                                {
+
                                 }
                             }
                             else//Новыми могут быть только поступления
