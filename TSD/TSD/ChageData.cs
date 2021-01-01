@@ -604,7 +604,7 @@ namespace TSD
 
                 
                 WS.WS ds = new TSD.WS.WS();
-                ds.Timeout = 600000;
+                ds.Timeout = 12000000;
                 string key = device_id + CryptorEngine.get_count_day_tsd();
                 string encrypt_data = CryptorEngine.Encrypt(device_id + sb.ToString() + device_id, true, key);
                 //System.IO.StreamWriter sw=new System.IO.StreamWriter("\\query.txt");
@@ -1269,7 +1269,7 @@ namespace TSD
                         textBox1.Text = "Загружаются строки документов " + i.ToString() + " из " + st.Length.ToString()+" \r\n ";
                     }
 
-                    query = "INSERT INTO dt(guid,tovar_code,quantity,price_buy,price,line_number,characteristic,quantity_shop) VALUES(" + st[i] + ",0" + ")";
+                    query = "INSERT INTO dt(guid,tovar_code,quantity,price_buy,price,line_number,characteristic,box,quantity_shop) VALUES(" + st[i] + ",0" + ")";
                     //query = "INSERT INTO dt(" + st[i] + ",0" + ")";
                     command = new SQLiteCommand(query, conn);
                     command.Transaction = trans;

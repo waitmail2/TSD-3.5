@@ -734,7 +734,8 @@ namespace TSD
                     " price_buy numeric(10,2)," +
                     " price numeric(10,2),"+
                     " line_number int, "+
-                    " its_sent smallint " +                 
+                    " its_sent smallint ,"+
+                    " box nvarchar(10)" +                 
                     ")";
                 cmd.Transaction = myTrans;
                 cmd.ExecuteNonQuery();
