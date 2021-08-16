@@ -39,15 +39,15 @@
             // 
             this.listView_inventory.Location = new System.Drawing.Point(3, 29);
             this.listView_inventory.Name = "listView_inventory";
-            this.listView_inventory.Size = new System.Drawing.Size(312, 127);
+            this.listView_inventory.Size = new System.Drawing.Size(312, 180);
             this.listView_inventory.TabIndex = 0;
             // 
             // label_comment
             // 
             this.label_comment.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
-            this.label_comment.Location = new System.Drawing.Point(4, 164);
+            this.label_comment.Location = new System.Drawing.Point(4, 212);
             this.label_comment.Name = "label_comment";
-            this.label_comment.Size = new System.Drawing.Size(311, 105);
+            this.label_comment.Size = new System.Drawing.Size(311, 57);
             // 
             // btn_new_document
             // 

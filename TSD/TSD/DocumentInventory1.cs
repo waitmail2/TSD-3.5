@@ -15,8 +15,10 @@ namespace TSD
 
         public string guid = "";
         public string typ_doc = "";
-        public int its_new = 0;
-
+        public int    its_new = 0;
+        public string status="";
+        public string info1c = "";
+        public string box = "0";
 
 
         public DocumentInventory1()
@@ -30,26 +32,22 @@ namespace TSD
         public bool write_new_document(string info_1s)
         {
             bool result = true;
-
-             //" type smallint NOT NULL,"+
-             //      " date datetime NOT NULL," +
-             //      " guid nvarchar(36) NOT NULL," +
-             //      " info_1s nvarchar(200),"+
-             //      " status smallint,"+
-             //      " display_quantity smallint"+
+                      
 
             SQLiteConnection conn = Program.ConnectForDataBase();
             try
             {
                 conn.Open();
-                string query = "INSERT INTO dh(type,date,guid,info_1s,status,display_quantity,its_new,db_id)" +
-                    " VALUES(@type,@date,@guid,@info_1s,@status,@display_quantity,@its_new,@db_id)";
+                string query = "INSERT INTO dh(type,date,guid,info_1s,status,display_quantity,its_new,db_id,allow_surplus)" +
+                    " VALUES(@type,@date,@guid,@info_1s,@status,@display_quantity,@its_new,@db_id,@allow_surplus)";
                 SQLiteParameter _type = new SQLiteParameter("type", typ_doc);               
                 SQLiteParameter _date = new SQLiteParameter("date", DateTime.Now);
                 SQLiteParameter _guid = new SQLiteParameter("guid", guid);
                 SQLiteParameter _info_1s = new SQLiteParameter("info_1s", info_1s);
                 SQLiteParameter _status = new SQLiteParameter("status", SqlDbType.Int);
                 _status.Value = 0;
+                SQLiteParameter _allow_surplus = new SQLiteParameter("allow_surplus", SqlDbType.Int);                
+                _allow_surplus.Value = 0;
                 SQLiteParameter _display_quantity = new SQLiteParameter("display_quantity", SqlDbType.Int);
                 _display_quantity.Value = 1;
                 SQLiteParameter _its_new = new SQLiteParameter("its_new", SqlDbType.Int);
@@ -59,6 +57,7 @@ namespace TSD
                 {
                     return false;
                 }
+                
                 SQLiteParameter _db_id = new SQLiteParameter("db_id", SqlDbType.Int);
                 _display_quantity.Value = db_id;                               
                 SQLiteCommand command = new SQLiteCommand(query, conn);
@@ -69,8 +68,27 @@ namespace TSD
                 command.Parameters.Add(_status);
                 command.Parameters.Add(_display_quantity);
                 command.Parameters.Add(_its_new);
-                command.Parameters.Add(_db_id); 
+                command.Parameters.Add(_db_id);
+                command.Parameters.Add(_allow_surplus);                
                 command.ExecuteNonQuery();
+
+                //Вставить строку с нулевым количеством 
+                //query = " INSERT INTO dt(guid,tovar_code,characteristic,quantity,quantity_shop,price_buy,price,line_number,its_sent,box,box_status)VALUES('" +
+                //       guid+"'," +
+                //       "12345,'" +
+                //       "'," +
+                //       "0" + "," +
+                //       "0," +
+                //       "0" + "," +
+                //       "0" + "," +
+                //       "1," +
+                //       "1" + ",'" +
+                //       "0','" +
+                //       "т');";
+
+                //command = new SQLiteCommand(query, conn);
+                //command.ExecuteNonQuery();
+                command.Dispose();
                 conn.Close();
             }
                 
@@ -106,10 +124,10 @@ namespace TSD
             {
                 btn_show_divergence_Click(null, null);
             }
-            else if (e.KeyCode == Keys.D8)
-            {
-                btn_delete_Click(null, null);
-            }
+            //else if (e.KeyCode == Keys.D3)
+            //{
+            //    btn_box_Click(null,null);
+            //}
             else if (e.KeyCode == Keys.D9)
             {
                 btn_complete_Click(null,null);
@@ -134,8 +152,7 @@ namespace TSD
                  
                  SQLiteDataReader reader = command.ExecuteReader();
                  while (reader.Read())
-                 {
-                     
+                 {                     
                      string type = reader["type"].ToString();
                      string date = reader.GetDateTime(1).ToString("dd-MM-yyyy");
                      string txt_info_1s = reader["info_1s"].ToString();
@@ -171,24 +188,33 @@ namespace TSD
                      conn.Close();
                  }
              }
-             if (typ_doc == "4")
-             {
-                 btn_delete.Enabled = true;
-             }
+             //if (typ_doc == "4")
+             //{
+             //    btn_box.Enabled = true;
+             //}
         }
 
         private void btn_start_continue_Click(object sender, EventArgs e)
         {
             if (typ_doc != "4")
             {
-                WorkWithBarcode wb = new WorkWithBarcode();
-                //wb.label_decription_document.Text = this.label_decription_document.Text;
-                //wb.tovar_code
-                wb.guid = guid;
-                wb.typ_doc = this.typ_doc;
-                wb.its_new = this.its_new;
-                wb.ShowDialog();
-                wb.Dispose();
+                //WorkWithBarcode wb = new WorkWithBarcode();
+                ////wb.label_decription_document.Text = this.label_decription_document.Text;
+                ////wb.tovar_code
+                //wb.guid = guid;
+                //wb.typ_doc = this.typ_doc;
+                //wb.its_new = this.its_new;
+                //wb.ShowDialog();
+                //wb.Dispose();
+                Boxes boxes = new Boxes();
+                boxes.guid = guid;
+                boxes.typ_doc = this.typ_doc;
+                boxes.its_new = this.its_new;
+                boxes.TopMost = true;
+                boxes.status = status;
+                boxes.info1c = info1c;
+                boxes.ShowDialog();
+                boxes.Dispose();
             }
             else
             {
@@ -355,59 +381,77 @@ namespace TSD
             //Program.BackupDatabases();
         }
 
-        private void btn_delete_Click(object sender, EventArgs e)
+        private void btn_box_Click(object sender, EventArgs e)
         {
-            if (DialogResult.Yes != MessageBox.Show("Вы хотите безвозвратно удалить документ ?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2))
-            {
-                return;
-            }
 
-            SQLiteConnection conn = Program.ConnectForDataBase();
-            SQLiteTransaction tran = null;
-
-            try
+            if (typ_doc != "4")
             {
-                conn.Open();
-                tran = conn.BeginTransaction();
-                string query = " DELETE FROM dh WHERE guid='" + guid + "'";
-                SQLiteCommand command = new SQLiteCommand(query, conn);
-                command.Transaction = tran;
-                command.ExecuteNonQuery();
-                query = " DELETE FROM dt WHERE guid='" + guid + "'";
-                command = new SQLiteCommand(query, conn);
-                command.Transaction = tran;
-                command.ExecuteNonQuery();
-                tran.Commit();
-                tran.Dispose();
-                command.Dispose();
-                conn.Close();                
-                this.Close();
+                Boxes boxes = new Boxes();                
+                boxes.guid = guid;
+                boxes.typ_doc = this.typ_doc;
+                boxes.its_new = this.its_new;
+                boxes.TopMost = true;
+                boxes.status = status;
+                boxes.info1c = info1c;
+                boxes.ShowDialog();
+                boxes.Dispose();
             }
-            catch (SQLiteException ex)
-            {
-                MessageBox.Show(ex.Message);
-                if (tran != null)
-                {
-                    tran.Rollback();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                if (tran != null)
-                {
-                    tran.Rollback();
-                }
-            }
-            finally
-            {
-                if (conn.State == ConnectionState.Open)
-                {
-                    conn.Close();
-                }
-            }
-            conn.Dispose();                
+           
         }
+
+        //private void btn_delete_Click(object sender, EventArgs e)
+        //{
+        //    if (DialogResult.Yes != MessageBox.Show("Вы хотите безвозвратно удалить документ ?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2))
+        //    {
+        //        return;
+        //    }
+
+        //    SQLiteConnection conn = Program.ConnectForDataBase();
+        //    SQLiteTransaction tran = null;
+
+        //    try
+        //    {
+        //        conn.Open();
+        //        tran = conn.BeginTransaction();
+        //        string query = " DELETE FROM dh WHERE guid='" + guid + "'";
+        //        SQLiteCommand command = new SQLiteCommand(query, conn);
+        //        command.Transaction = tran;
+        //        command.ExecuteNonQuery();
+        //        query = " DELETE FROM dt WHERE guid='" + guid + "'";
+        //        command = new SQLiteCommand(query, conn);
+        //        command.Transaction = tran;
+        //        command.ExecuteNonQuery();
+        //        tran.Commit();
+        //        tran.Dispose();
+        //        command.Dispose();
+        //        conn.Close();                
+        //        this.Close();
+        //    }
+        //    catch (SQLiteException ex)
+        //    {
+        //        MessageBox.Show(ex.Message);
+        //        if (tran != null)
+        //        {
+        //            tran.Rollback();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex.Message);
+        //        if (tran != null)
+        //        {
+        //            tran.Rollback();
+        //        }
+        //    }
+        //    finally
+        //    {
+        //        if (conn.State == ConnectionState.Open)
+        //        {
+        //            conn.Close();
+        //        }
+        //    }
+        //    conn.Dispose();                
+        //}
         
     }
 }

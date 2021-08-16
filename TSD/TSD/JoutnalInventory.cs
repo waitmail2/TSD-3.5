@@ -28,7 +28,7 @@ namespace TSD
             {
                 if (listView_inventory.SelectedIndices.Count > 0)
                 {
-                    label_comment.Text = listView_inventory.Items[listView_inventory.SelectedIndices[0]].SubItems[2].Text;
+                    label_comment.Text = listView_inventory.Items[listView_inventory.SelectedIndices[0]].SubItems[4].Text;
                 }
             }
         }
@@ -90,7 +90,9 @@ namespace TSD
             listView_inventory.Columns.Add("Статус", 20, HorizontalAlignment.Left);
             //if (typ_doc != 4)
             //{
-            listView_inventory.Columns.Add("Дата", 100, HorizontalAlignment.Left);
+            listView_inventory.Columns.Add("Дата", 70, HorizontalAlignment.Left);
+            listView_inventory.Columns.Add("П", 30, HorizontalAlignment.Left);
+            listView_inventory.Columns.Add("Ф", 30, HorizontalAlignment.Left);
             //}
             listView_inventory.Columns.Add("Комментарий", 200, HorizontalAlignment.Left);
             load_documents();
@@ -205,6 +207,11 @@ namespace TSD
                     }
                     ListViewItem item = new ListViewItem(_status);                    
                     item.SubItems.Add(reader.GetDateTime(1).ToString("dd.MM.yyyy"));
+
+                    int[] boxes_info = calculate_boxes(reader["guid"].ToString());
+                    item.SubItems.Add(boxes_info[0].ToString());
+                    item.SubItems.Add(boxes_info[1].ToString());
+
                     item.Tag = reader["guid"].ToString();
                     item.SubItems.Add(reader["info_1s"].ToString());
                     listView_inventory.Items.Add(item);
@@ -230,6 +237,56 @@ namespace TSD
                     conn.Close();
                 }
             } 
+        }
+
+        /// <summary>
+        /// первый элемент массива всего коробок
+        /// второй элемент массива обработкно
+        /// или в обработке коробок
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <returns></returns>
+        private int[] calculate_boxes(string guid)
+        {
+            int[] result = new int[2];
+            SQLiteConnection conn = Program.ConnectForDataBase();
+
+            int boxes_total=0;
+            int boxes_in_processing = 0;
+            try
+            {
+                conn.Open();
+                string query = "SELECT box,MAX(box_status) AS box_status FROM dt where guid='" + guid + "' GROUP BY box ";
+                SQLiteCommand command = new SQLiteCommand(query, conn);
+                SQLiteDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    boxes_total++;
+                    if (reader["box_status"].ToString() != "")
+                    {
+                        boxes_in_processing++;
+                    }
+                }
+                result[0] = boxes_total;
+                result[1] = boxes_in_processing;
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                if (conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                }
+            } 
+
+            return result; 
         }
 
 
@@ -276,6 +333,9 @@ namespace TSD
                 d1.guid = guid;
                 d1.typ_doc = typ_doc.ToString();// listView_inventory.FocusedItem.SubItems[1].Text;
                 //d1.its_new = false;
+                d1.status = listView_inventory.Items[listView_inventory.SelectedIndices[0]].SubItems[0].Text;
+                d1.info1c = label_comment.Text;
+                
                 d1.ShowDialog();
                 listView_inventory.Items.Clear();
                 load_documents();
@@ -305,7 +365,8 @@ namespace TSD
             {
                 MessageBox.Show(" Не удалось записать новый документ ");
                 return;
-            }            
+            }  
+            
             doc.ShowDialog();
             doc.Dispose();
             listView_inventory.Items.Clear();
@@ -327,7 +388,7 @@ namespace TSD
                 listView_inventory.Items[index].Focused = true;
                 listView_inventory.EnsureVisible(index);
             }
-            btn_select_Click(null, null);
+            //btn_select_Click(null, null);
         }
 
         private void btn_selection_Click(object sender, EventArgs e)

@@ -702,9 +702,16 @@ namespace TSD
                 cmd.ExecuteNonQuery();
 
                 cmd.CommandText = " CREATE TABLE constants(" +
-                    " db_id smallint NOT NULL)";
+                    " db_id smallint NOT NULL,date nvarchar(10))";
                 cmd.Transaction = myTrans;
                 cmd.ExecuteNonQuery();
+
+                //Установим первичную дату загрузки данных
+                //***********************************************
+                cmd.CommandText = " INSERT INTO constants(db_id,date)VALUES(0,'01.01.2000') ";
+                cmd.Transaction = myTrans;
+                cmd.ExecuteNonQuery();
+                //***********************************************
 
                 cmd.CommandText = " CREATE TABLE last_scaned(" +
                     " guid nvarchar(36) NOT NULL,"+
@@ -720,7 +727,8 @@ namespace TSD
                    " status smallint,"+
                    " display_quantity smallint,"+
                    " its_new smallint," +
-                   " db_id smallint NOT NULL "+
+                   " db_id smallint NOT NULL ,"+
+                   " allow_surplus smallint NOT NULL " +
                    ")";
                 cmd.Transaction = myTrans;
                 cmd.ExecuteNonQuery();
@@ -735,13 +743,18 @@ namespace TSD
                     " price numeric(10,2),"+
                     " line_number int, "+
                     " its_sent smallint ,"+
-                    " box nvarchar(10)" +                 
+                    " box nvarchar(10)," +
+                    " box_status nvarchar(1)"+
                     ")";
                 cmd.Transaction = myTrans;
                 cmd.ExecuteNonQuery();
 
                 //cmd.CommandText = "CREATE INDEX Ind_dt ON dt(line_number,guid,tovar_code,characteristic)";
                 cmd.CommandText = "CREATE INDEX Ind_dt ON dt(guid,tovar_code,line_number)";
+                cmd.Transaction = myTrans;
+                cmd.ExecuteNonQuery();
+
+                cmd.CommandText = "CREATE INDEX Ind_dt_box ON dt(guid,box)";
                 cmd.Transaction = myTrans;
                 cmd.ExecuteNonQuery();
                              

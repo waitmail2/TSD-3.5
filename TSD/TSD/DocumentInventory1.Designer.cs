@@ -31,7 +31,6 @@
             this.label_decription_document = new System.Windows.Forms.Label();
             this.btn_start_continue = new System.Windows.Forms.Button();
             this.btn_show_divergence = new System.Windows.Forms.Button();
-            this.btn_delete = new System.Windows.Forms.Button();
             this.btn_complete = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -61,16 +60,6 @@
             this.btn_show_divergence.Text = "(2) Просмотр расхождений";
             this.btn_show_divergence.Click += new System.EventHandler(this.btn_show_divergence_Click);
             // 
-            // btn_delete
-            // 
-            this.btn_delete.Enabled = false;
-            this.btn_delete.Location = new System.Drawing.Point(4, 195);
-            this.btn_delete.Name = "btn_delete";
-            this.btn_delete.Size = new System.Drawing.Size(311, 40);
-            this.btn_delete.TabIndex = 4;
-            this.btn_delete.Text = "(8) Удалить";
-            this.btn_delete.Click += new System.EventHandler(this.btn_delete_Click);
-            // 
             // btn_complete
             // 
             this.btn_complete.Location = new System.Drawing.Point(4, 242);
@@ -88,7 +77,6 @@
             this.ClientSize = new System.Drawing.Size(318, 295);
             this.ControlBox = false;
             this.Controls.Add(this.btn_complete);
-            this.Controls.Add(this.btn_delete);
             this.Controls.Add(this.btn_show_divergence);
             this.Controls.Add(this.btn_start_continue);
             this.Controls.Add(this.label_decription_document);
@@ -104,7 +92,6 @@
         private System.Windows.Forms.Label label_decription_document;
         private System.Windows.Forms.Button btn_start_continue;
         private System.Windows.Forms.Button btn_show_divergence;
-        private System.Windows.Forms.Button btn_delete;
         private System.Windows.Forms.Button btn_complete;
     }
 }

@@ -51,8 +51,9 @@ D:\disk f\MyProject\TSD 3.5\TSD\TSD\obj\Debug\TSD.DocumentInventory1.resources
 D:\disk f\MyProject\TSD 3.5\TSD\TSD\obj\Debug\TSD.JoutnalInventory.resources
 D:\disk f\MyProject\TSD 3.5\TSD\TSD\obj\Debug\TSD.SelectProducts.resources
 D:\Last Cash8\TSD 3.5\TSD\TSD\obj\Debug\TSD.SelectProducts.resources
-D:\Last Cash8\TSD 3.5\TSD\TSD\bin\Debug\System.Data.OracleClient.dll
-D:\Last Cash8\TSD 3.5\TSD\TSD\bin\Debug\System.Transactions.dll
-D:\Last Cash8\TSD 3.5\TSD\TSD\bin\Debug\System.EnterpriseServices.dll
-D:\Last Cash8\TSD 3.5\TSD\TSD\bin\Debug\System.Web.dll
-D:\Last Cash8\TSD 3.5\TSD\TSD\bin\Debug\System.EnterpriseServices.Wrapper.dll
+D:\disk f\MyProject\TSD 3.5\TSD\TSD\bin\Debug\Newtonsoft.Json.Compact.dll
+D:\disk f\MyProject\TSD 3.5\TSD\TSD\bin\Debug\Newtonsoft.Json.Compact.pdb
+D:\disk f\MyProject\TSD 3.5\TSD\TSD\bin\Debug\Newtonsoft.Json.Compact.xml
+D:\disk f\MyProject\TSD 3.5\TSD\TSD\obj\Debug\TSD.Boxes.resources
+D:\Last Cash8\TSD 3.5\TSD\TSD\obj\Debug\TSD.Boxes.resources
+D:\Last Cash8\TSD 3.5\TSD\TSD\obj\Debug\TSD.SelectButtonBox.resources

@@ -22,6 +22,8 @@ namespace TSD
         public bool close_this_form = false;
         public string typ_doc = "";
         public int its_new = 0;
+        public string num_box = "";
+        //public string status = "";
 
 
         public WorkWithBarcode()
@@ -96,16 +98,34 @@ namespace TSD
             {
                 conn.Open();
                 string query = "";
+                
                 if (characteristic_guid != "")
                 {
-                    query = " SELECT SUM(quantity) FROM dt WHERE guid='" + guid + "'" +
-                         " AND tovar_code=" + tovar_code +
-                         " AND characteristic='" + characteristic_guid + "' GROUP BY tovar_code,characteristic ";
+                    if (num_box.Trim() == "")
+                    {
+                        query = " SELECT SUM(quantity) FROM dt WHERE guid='" + guid + "'" +
+                             " AND tovar_code=" + tovar_code +
+                             " AND characteristic='" + characteristic_guid + "' GROUP BY tovar_code,characteristic ";
+                    }
+                    else
+                    {
+                        query = " SELECT SUM(quantity) FROM dt WHERE guid='" + guid + "'" +
+                          " AND tovar_code=" + tovar_code +
+                          " AND characteristic='" + characteristic_guid + "' AND box='" + num_box + "' GROUP BY tovar_code,characteristic ";
+                    }
                 }
                 else
                 {
-                    query = " SELECT SUM(quantity) FROM dt WHERE guid='" + guid + "'" +
-                                            " AND tovar_code=" + tovar_code + " GROUP BY tovar_code ";
+                    if (num_box.Trim() == "")
+                    {
+                        query = " SELECT SUM(quantity) FROM dt WHERE guid='" + guid + "'" +
+                                                " AND tovar_code=" + tovar_code + " GROUP BY tovar_code ";
+                    }
+                    else
+                    {
+                        query = " SELECT SUM(quantity) FROM dt WHERE guid='" + guid + "'" +
+                                                                       " AND tovar_code=" + tovar_code + " AND box='"+num_box+"' GROUP BY tovar_code ";
+                    }
                 }
 
                 SQLiteCommand command = new SQLiteCommand(query, conn);
@@ -144,14 +164,32 @@ namespace TSD
                 string query = "";
                 if (characteristic_guid != "")
                 {
-                    query = " SELECT SUM(quantity_shop) FROM dt WHERE guid='" + guid + "'" +
-                         " AND tovar_code=" + tovar_code +
-                         " AND characteristic='" + characteristic_guid + "' GROUP BY tovar_code,characteristic ";
+                    if (num_box == "")
+                    {
+                        query = " SELECT SUM(quantity_shop) FROM dt WHERE guid='" + guid + "'" +
+                             " AND tovar_code=" + tovar_code +
+                             " AND characteristic='" + characteristic_guid + "' GROUP BY tovar_code,characteristic ";
+                    }
+                    else
+                    {
+                        query = " SELECT SUM(quantity_shop) FROM dt WHERE guid='" + guid + "'" +
+                                                    " AND tovar_code=" + tovar_code +
+                                                    " AND characteristic='" + characteristic_guid + "' AND box='" + num_box + "'  GROUP BY tovar_code,characteristic ";
+                    }
+                   
                 }
                 else
                 {
-                    query = " SELECT SUM(quantity_shop) FROM dt WHERE guid='" + guid + "'" +
-                                            " AND tovar_code=" + tovar_code + " GROUP BY tovar_code ";                                            
+                    if (num_box == "")
+                    {
+                        query = " SELECT SUM(quantity_shop) FROM dt WHERE guid='" + guid + "'" +
+                                                " AND tovar_code=" + tovar_code + " GROUP BY tovar_code ";
+                    }
+                    else
+                    {
+                        query = " SELECT SUM(quantity_shop) FROM dt WHERE guid='" + guid + "'" +
+                                                                       " AND tovar_code=" + tovar_code +" AND box='" + num_box + "' GROUP BY tovar_code ";
+                    }
                 }
                 SQLiteCommand command = new SQLiteCommand(query, conn);
                 object result_query = command.ExecuteScalar();
@@ -264,6 +302,10 @@ namespace TSD
         
         private void WorkWithBarcode_Load(object sender, EventArgs e)
         {
+            if (its_new == 1)
+            {
+                num_box = "0";
+            }
             to_check_the_status_of_the_document();
 
             if (!open_from_document_list)
@@ -279,7 +321,7 @@ namespace TSD
             get_display_quantity();
             if (tovar_code != "")
             {
-                label_количество_в_магазине.Text = " в документе  " + get_quantity_shop();
+                label_количество_в_магазине.Text = " в коробке  " + get_quantity_shop();
                 label_количество_в_1с.Text = get_quantity_1c();
             }               
         }
@@ -393,7 +435,7 @@ namespace TSD
         private void write_record()
         {
 
-            label_количество_в_магазине.Text = " в документе  ";
+            label_количество_в_магазине.Text = " в коробке  ";
             label_количество_в_1с.Text = "";
 
             //проверка на отрицательное количество 
@@ -439,11 +481,25 @@ namespace TSD
                 //перед обновлением по количеству надо понять есть такой товар в документе или нет
                 if (characteristic_guid != "")
                 {
-                    query = "SELECT COUNT(*) FROM dt WHERE guid ='" + guid + "' AND tovar_code=" + tovar_code + " AND characteristic='" + characteristic_guid+"'";
+                    if (num_box == "")
+                    {
+                        query = "SELECT COUNT(*) FROM dt WHERE guid ='" + guid + "' AND tovar_code=" + tovar_code + " AND characteristic='" + characteristic_guid + "'";
+                    }
+                    else
+                    {
+                        query = "SELECT COUNT(*) FROM dt WHERE guid ='" + guid + "' AND tovar_code=" + tovar_code + " AND characteristic='" + characteristic_guid + "' AND box='" + num_box + "' ";
+                    }
                 }
                 else
                 {
-                    query = "SELECT COUNT(*) FROM dt WHERE guid ='" + guid + "' AND tovar_code=" + tovar_code;
+                    if (num_box == "")
+                    {
+                        query = "SELECT COUNT(*) FROM dt WHERE guid ='" + guid + "' AND tovar_code=" + tovar_code;
+                    }
+                    else
+                    {
+                        query = "SELECT COUNT(*) FROM dt WHERE guid ='" + guid + "' AND tovar_code=" + tovar_code + " AND box='" + num_box + "' ";
+                    }
                 }
                 SQLiteCommand  command = new SQLiteCommand(query, conn);
                 int count_tovar = Convert.ToInt16(command.ExecuteScalar());
@@ -470,7 +526,7 @@ namespace TSD
                     {
                         //query = " INSERT INTO dt(guid,tovar_code,characteristic,quantity,quantity_shop,price_buy,price,line_number,its_sent)VALUES(@guid,@tovar_code,@characteristic,@quantity,@quantity_shop,@price_buy,@price,@line_number,@its_sent);";
                         //query = " INSERT INTO dt(guid,tovar_code,characteristic,quantity,quantity_shop,price_buy,price)VALUES(@guid,@tovar_code,@characteristic,@quantity,@quantity_shop,@price_buy,@price);";
-                        query = " INSERT INTO dt(guid,tovar_code,characteristic,quantity,quantity_shop,price_buy,price,line_number,its_sent)VALUES('" +
+                        query = " INSERT INTO dt(guid,tovar_code,characteristic,quantity,quantity_shop,price_buy,price,line_number,its_sent,box,box_status)VALUES('" +
                         guid + "'," +
                         tovar_code + ",'" +
                         characteristic_guid + "'," +
@@ -479,13 +535,15 @@ namespace TSD
                         "0" + "," +
                         "0" + "," +
                         get_new_line_number() + "," +
-                        "1" + ");";
+                        "1" + ",'" +
+                        num_box+"','"+
+                        "т');";
                     }
                     else
                     {
                         //query = " INSERT INTO dt(guid,tovar_code,quantity,quantity_shop,price_buy,price,line_number,its_sent)VALUES(@guid,@tovar_code,@quantity,@quantity_shop,@price_buy,@price,@line_number,@its_sent);";
                         //query = " INSERT INTO dt(guid,tovar_code,quantity,quantity_shop,price_buy,price)VALUES(@guid,@tovar_code,@quantity,@quantity_shop,@price_buy,@price);";
-                        query = " INSERT INTO dt(guid,tovar_code,quantity,quantity_shop,price_buy,price,line_number,its_sent)VALUES('" +
+                        query = " INSERT INTO dt(guid,tovar_code,quantity,quantity_shop,price_buy,price,line_number,its_sent,box,box_status)VALUES('" +
                         guid + "'," +
                         tovar_code + "," +
                         "0" + "," +
@@ -493,41 +551,12 @@ namespace TSD
                         "0" + "," +
                         "0" + "," +
                         get_new_line_number() + "," +
-                        "1" + ");";
+                        "1" + ",'" +
+                        num_box + "','"+
+                        "т');";
                     }
 
-                    command = new SQLiteCommand(query, conn);
-
-                    //SQLiteParameter _guid = new SQLiteParameter("guid", guid);
-                    //SQLiteParameter _tovar_code = new SQLiteParameter("tovar_code", Convert.ToInt32(tovar_code));
-                    //if (characteristic_guid != "")
-                    //{
-                    //    SQLiteParameter _characteristic = new SQLiteParameter("characteristic", characteristic_guid);
-                    //    command.Parameters.Add(_characteristic);
-                    //}
-                    //SQLiteParameter _quantity = new SQLiteParameter("quantity",0);                    
-                    //SQLiteParameter _quantity_shop = new SQLiteParameter("quantity_shop", quantity_shop);
-                    //SQLiteParameter _price_buy = new SQLiteParameter("price_buy", 0);                    
-                    //SQLiteParameter _price = new SQLiteParameter("price", 0);                    
-
-                    //SQLiteParameter _line_number = null;
-                    ////получаем сначала номер строки 
-                    //string new_line_number = get_new_line_number();
-                    //if (new_line_number != "-1")
-                    //{                        
-                    //    _line_number = new SQLiteParameter("line_number", Convert.ToInt32(new_line_number));
-                    //}
-
-                    //SQLiteParameter _its_sent = new SQLiteParameter("its_sent", 1);                   
-
-                    //command.Parameters.Add(_guid);
-                    //command.Parameters.Add(_tovar_code);
-                    //command.Parameters.Add(_quantity);
-                    //command.Parameters.Add(_quantity_shop);
-                    //command.Parameters.Add(_price_buy);
-                    //command.Parameters.Add(_price);
-                    //command.Parameters.Add(_line_number);
-
+                    command = new SQLiteCommand(query, conn);                   
                     command.ExecuteNonQuery();
                     command.Dispose();
                 }
@@ -540,9 +569,18 @@ namespace TSD
                 string tovar_name = "";
                 if (characteristic_guid != "")
                 {
-                    query = " SELECT tovar.name AS tovar_name,characteristic.name AS characteristic_name  FROM tovar LEFT JOIN characteristic " +
-                    " ON tovar.code=characteristic.tovar_code WHERE code=" + tovar_code+
-                    " AND characteristic.guid='"+characteristic_guid+"'";
+                    if (num_box == "")
+                    {
+                        query = " SELECT tovar.name AS tovar_name,characteristic.name AS characteristic_name  FROM tovar LEFT JOIN characteristic " +
+                        " ON tovar.code=characteristic.tovar_code WHERE code=" + tovar_code +
+                        " AND characteristic.guid='" + characteristic_guid + "'";
+                    }
+                    else
+                    {
+                        query = " SELECT tovar.name AS tovar_name,characteristic.name AS characteristic_name  FROM tovar LEFT JOIN characteristic " +
+                                               " ON tovar.code=characteristic.tovar_code WHERE code=" + tovar_code +
+                                               " AND characteristic.guid='" + characteristic_guid + "' AND box='" + num_box + "' ";
+                    }
                     command = new SQLiteCommand(query, conn);
                     SQLiteDataReader reader = command.ExecuteReader();
                     while (reader.Read())
@@ -554,14 +592,22 @@ namespace TSD
                 }
                 else
                 {
-                    query = " SELECT name FROM tovar WHERE code=" + tovar_code;
+                    //if (num_box == "")
+                    //{
+                    //    query = " SELECT name FROM tovar WHERE code=" + tovar_code;
+                    //}
+                    //else
+                    //{
+                        query = " SELECT name FROM tovar WHERE code=" + tovar_code ;
+                    //}
                     command = new SQLiteCommand(query, conn);
                     tovar_name = command.ExecuteScalar().ToString();
+                    command.Dispose();
                 }
 
                 //НАЧАЛО Обновление записей на форме
                 txtB_tovar.Text = tovar_code+", "+tovar_name;
-                label_количество_в_магазине.Text = " в документе  " + get_quantity_shop();
+                label_количество_в_магазине.Text = " в коробке  " + get_quantity_shop();
                 label_количество_в_1с.Text = get_quantity_1c();
                 //КОНЕЦ Обновление записей на форме
                                
@@ -606,6 +652,8 @@ namespace TSD
             {
                 this.Close();
             }
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
 
 
@@ -656,17 +704,20 @@ namespace TSD
                 if (characteristic_guid == "")
                 {
                     query = " UPDATE dt SET its_sent=1,quantity_shop=" +
-                    quantity_shop.ToString() + " WHERE guid='" + guid +
+                    quantity_shop.ToString() + " , box_status='т' WHERE guid='" + guid +
                     "' AND tovar_code = " + tovar_code +
                     " AND line_number=" + line_number.ToString();
+                    
                 }
                 else
                 {
                     query = " UPDATE dt SET its_sent=1,quantity_shop=" +
-                  quantity_shop.ToString() + " WHERE guid='" + guid +"'"+
+                        //quantity_shop.ToString() + " WHERE guid='" + guid +"'"+
+                  quantity_shop.ToString() + " , box_status='т' WHERE guid='" + guid +
                   " AND tovar_code = " + tovar_code +
-                  " AND characteristic = '" + characteristic_guid+"'"+
-                  " AND line_number=" + line_number.ToString();  
+                  " AND characteristic = '" + characteristic_guid + "'" +
+                  " AND line_number=" + line_number.ToString();
+                  
                 }
                 SQLiteCommand command = new SQLiteCommand(query, conn);
                 command.ExecuteNonQuery();
@@ -713,16 +764,36 @@ namespace TSD
                 string query = "";
                 if (characteristic_guid == "")
                 {
-                    query = " SELECT line_number,quantity_shop,quantity FROM dt WHERE guid ='" +
-                       guid + "' AND tovar_code = " + tovar_code +
-                       " order by line_number ";
+                    if (num_box == "")
+                    {
+                        query = " SELECT line_number,quantity_shop,quantity FROM dt WHERE guid ='" +
+                           guid + "' AND tovar_code = " + tovar_code +
+                           " order by line_number ";
+                    }
+                    else
+                    {
+                        query = " SELECT line_number,quantity_shop,quantity FROM dt WHERE guid ='" +
+                                                  guid + "' AND tovar_code = " + tovar_code +" AND box='" + num_box + "' "+
+                                                  " order by line_number ";
+                    }
                 }
                 else
                 {
-                    query = " SELECT line_number,quantity_shop,quantity FROM dt WHERE guid ='" +
-                            guid + "' AND tovar_code = " + tovar_code +
-                            " AND characteristic='" +characteristic_guid+"'"+
-                            " order by line_number ";
+                    if (num_box == "")
+                    {
+                        query = " SELECT line_number,quantity_shop,quantity FROM dt WHERE guid ='" +
+                                guid + "' AND tovar_code = " + tovar_code +
+                                " AND characteristic='" + characteristic_guid + "'" +
+                                " order by line_number ";
+                    }
+                    else
+                    {
+                        query = " SELECT line_number,quantity_shop,quantity FROM dt WHERE guid ='" +
+                              guid + "' AND tovar_code = " + tovar_code +" AND box='" + num_box + "' " +
+                              " AND characteristic='" + characteristic_guid + "'" +
+                              " order by line_number ";
+ 
+                    }
                 }
 
                 SQLiteCommand command = new SQLiteCommand(query, conn);
@@ -791,6 +862,7 @@ namespace TSD
                 //    Close();
                 //}
             }
+
         }
 
         /// <summary>
@@ -815,16 +887,36 @@ namespace TSD
                 string query = "";
                 if (characteristic_guid == "")
                 {
-                    query = " SELECT line_number,quantity_shop,quantity FROM dt WHERE guid ='" +
-                       guid + "' AND tovar_code = " + tovar_code +
-                       " order by line_number ";
+                    if (num_box == "")
+                    {
+                        query = " SELECT line_number,quantity_shop,quantity FROM dt WHERE guid ='" +
+                           guid + "' AND tovar_code = " + tovar_code +
+                           " order by line_number ";
+                    }
+                    else
+                    {
+                        query = " SELECT line_number,quantity_shop,quantity FROM dt WHERE guid ='" +
+                                                  guid + "' AND tovar_code = " + tovar_code +" AND box='" + num_box + "' " +
+                                                  " order by line_number ";
+                    }
                 }
                 else
                 {
-                    query = " SELECT line_number,quantity_shop,quantity FROM dt WHERE guid ='" +
-                            guid + "' AND tovar_code = " + tovar_code +
-                            " AND characteristic='" + characteristic_guid + "'" +
-                            " order by line_number ";
+                    if (num_box == "")
+                    {
+                        query = " SELECT line_number,quantity_shop,quantity FROM dt WHERE guid ='" +
+                                guid + "' AND tovar_code = " + tovar_code +
+                                " AND characteristic='" + characteristic_guid + "'" +
+                                " order by line_number ";
+                    }
+                    else
+                    {
+                        query = " SELECT line_number,quantity_shop,quantity FROM dt WHERE guid ='" +
+                                guid + "' AND tovar_code = " + tovar_code + " AND box='" + num_box + "' " +
+                                " AND characteristic='" + characteristic_guid + "'" +
+                                " order by line_number ";
+ 
+                    }
                 }
 
                 SQLiteCommand command = new SQLiteCommand(query, conn);
@@ -856,6 +948,7 @@ namespace TSD
 
                 }
                 reader.Close();
+                command.Dispose();
                 //conn.Close();
 
                 //if (quantity != 0)
@@ -888,7 +981,7 @@ namespace TSD
         public void find_barcode_or_code_in_tovar(string barcode)
         {
 
-            label_количество_в_магазине.Text = " в документе  ";
+            label_количество_в_магазине.Text = " в коробке  ";
             label_количество_в_1с.Text = "";
 
 
@@ -1012,22 +1105,38 @@ namespace TSD
                         //получить количество 
                         if (characteristic_guid != "")
                         {
-                            query = "SELECT quantity_shop FROM dt WHERE guid='" +
-                                guid + "' AND tovar_code=" + tovar_code + " AND characteristic = '" + characteristic_guid + "'";
+                            if (num_box == "")
+                            {
+                                query = "SELECT quantity_shop FROM dt WHERE guid='" +
+                                    guid + "' AND tovar_code=" + tovar_code + " AND characteristic = '" + characteristic_guid + "'";
+                            }
+                            else
+                            {
+                                query = "SELECT quantity_shop FROM dt WHERE guid='" +
+                                                                   guid + "' AND tovar_code=" + tovar_code + " AND characteristic = '" + characteristic_guid + "' AND box='" + num_box + "' ";
+                            }
                         }
                         else
                         {
-                            query = "SELECT quantity_shop FROM dt WHERE guid='" + guid + "' AND tovar_code=" + tovar_code;
+                            if (num_box == "")
+                            {
+                                query = "SELECT quantity_shop FROM dt WHERE guid='" + guid + "' AND tovar_code=" + tovar_code;
+                            }
+                            else
+                            {
+                                query = "SELECT quantity_shop FROM dt WHERE guid='" + guid + "' AND tovar_code=" + tovar_code+ " AND box='" + num_box + "' ";;
+                            }
                         }
                         command = new SQLiteCommand(query, conn);
                         result_query = command.ExecuteScalar();
+                        command.Dispose();
                         //if (Convert.ToInt32(result_query) != 0)
                         
                         if (result_query != null)
                         {
                             txtB_tovar.Text = tovar_code + "," + reader["tovar_name"].ToString() +";"+
                                 reader["characteristic_name"].ToString();
-                            label_количество_в_магазине.Text = " в документе  " +get_quantity_shop() ;
+                            label_количество_в_магазине.Text = " в коробке  " +get_quantity_shop() ;
                             label_количество_в_1с.Text =  get_quantity_1c(); 
 
                         }
@@ -1039,7 +1148,7 @@ namespace TSD
                                 {
                                     txtB_tovar.Text = tovar_code + ", " + reader["tovar_name"].ToString() + ";" +
                                         reader["characteristic_name"].ToString() +
-                                        " \r\n ОТСУТСТВУЕТ В ЭТОМ ДОКУМЕНТЕ ";
+                                        " \r\n ОТСУТСТВУЕТ В ЭТОЙ КОРОБКЕ ";
                                     PlaySound ps = new PlaySound();
                                     ps.PlaySound_WAV("\\Windows\\exclam.wav");
                                     if (typ_doc == "2")
@@ -1058,7 +1167,7 @@ namespace TSD
                             {
                                 txtB_tovar.Text = tovar_code + "," + reader["tovar_name"].ToString() + ";" +
                               reader["characteristic_name"].ToString();
-                                label_количество_в_магазине.Text = " в документе  " + get_quantity_shop();
+                                label_количество_в_магазине.Text = " в коробке  " + get_quantity_shop();
                                 label_количество_в_1с.Text = get_quantity_1c();  
                             }
                             //ps.PlaySound_WAV("\\Windows\\exclam.wav");
@@ -1104,7 +1213,7 @@ namespace TSD
         protected override void OnKeyDown(KeyEventArgs e)
         {
            // base.OnKeyDown(e);
-            if (e.KeyCode == Keys.F)
+            if (e.KeyCode == Keys.Z)
             {
                 txtB_input_barcode.Focus();
                 write_record();
@@ -1116,7 +1225,7 @@ namespace TSD
             {
                 this.Close();
             }
-            else if (e.KeyCode == Keys.ControlKey)
+            else if (e.KeyCode == Keys.F15)
             {
                 if (txtB_quantity.Text.IndexOf("-") == -1)
                 {
